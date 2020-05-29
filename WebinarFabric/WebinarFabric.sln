@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "WebinarFabric", "WebinarFabric\WebinarFabric.sfproj", "{23389B6C-12DE-4E4E-B81B-66124E40E3C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Debug|x64.ActiveCfg = Debug|x64
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Debug|x64.Build.0 = Debug|x64
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Debug|x64.Deploy.0 = Debug|x64
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Release|x64.ActiveCfg = Release|x64
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Release|x64.Build.0 = Release|x64
+		{23389B6C-12DE-4E4E-B81B-66124E40E3C2}.Release|x64.Deploy.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0298EB4-FF68-4892-89E0-B8F23A41924D}
+	EndGlobalSection
+EndGlobal

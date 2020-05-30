@@ -31,6 +31,15 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RailwaySensorService\RailwaySensorService.csproj" />
+    <ProjectReference Include="..\TopologyService\TopologyService.csproj" />
+    <ProjectReference Include="..\TrainsService\TrainsService.csproj" />
+    <ProjectReference Include="..\WagonGpsService\WagonGpsService.csproj" />
+    <ProjectReference Include="..\WebApiWebinarService\WebApiWebinarService.csproj">
+      <ServiceLaunchUrl>http://{MachineName}:{ServicePort}/weatherforecast</ServiceLaunchUrl>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>
     <ApplicationProjectTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Service Fabric Tools\Microsoft.VisualStudio.Azure.Fabric.ApplicationProject.targets</ApplicationProjectTargetsPath>

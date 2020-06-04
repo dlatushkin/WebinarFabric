@@ -94,7 +94,6 @@ let main argv =
 
   let basicHandler _ =
     let now = DateTime.Now
-    printfn "tick %A" now
     railwayAgent.Post(Railways.Tick(now))
 
   let basicTimer = TimerUtilities.createTimer 1000 basicHandler

@@ -49,5 +49,10 @@ open System
 
   let calculateRailway (prevRailway:Railway) (now:DateTime) =
     printfn "calculateRailway %A" now
-    let nextRailway = {prevRailway with Lines = [||]}
+    let nextRailway = { Lines = prevRailway.Lines
+      |> Seq.map (fun prevLine -> { prevLine with Trains =
+        prevLine.Trains
+        |> Seq.map (fun prevTrain -> { prevTrain with Number = prevTrain.Number } )
+        |> Seq.toArray } )
+      |> Seq.toArray }
     nextRailway

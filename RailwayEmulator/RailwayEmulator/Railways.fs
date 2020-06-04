@@ -4,6 +4,8 @@ open System
   
   type Train = {
     Number: string
+    Point: float
+    Direction: float
   }
   
   type Line = {
@@ -43,16 +45,30 @@ open System
   
   let getStateAsync (agent: MailboxProcessor<RailwayMessage>) = agent.PostAndAsyncReply Get
 
-  let buildRailway() = {
-    Lines = [| { Id = "L01"; Name = "1st Line"; Trains = [| { Number = "7001"}; {Number = "7002" } |] } |]
-  }
+  let buildRailway() =
+    {
+      Lines = 
+        [| 
+          {
+            Id = "L01"
+            Name = "1st Line"
+            Trains =
+              [|
+                { Number = "7001"; Point = 0.0; Direction = 1.0 }
+                { Number = "7002"; Point = 10.0; Direction = 1.0 }
+              |]
+          }
+        |]
+    }
 
   let calculateRailway (prevRailway:Railway) (now:DateTime) =
     printfn "calculateRailway %A" now
     let nextRailway = { Lines = prevRailway.Lines
       |> Seq.map (fun prevLine -> { prevLine with Trains =
         prevLine.Trains
-        |> Seq.map (fun prevTrain -> { prevTrain with Number = prevTrain.Number } )
+        |> Seq.map (fun prevTrain ->
+          { prevTrain with
+            Point = prevTrain.Point + prevTrain.Direction } )
         |> Seq.toArray } )
       |> Seq.toArray }
     nextRailway

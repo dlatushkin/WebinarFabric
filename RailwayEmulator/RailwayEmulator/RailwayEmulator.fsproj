@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TimerUtilities.fs" />
+    <Compile Include="AgentUtilities.fs" />
     <Compile Include="Railways.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

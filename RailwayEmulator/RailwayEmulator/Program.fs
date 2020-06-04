@@ -9,6 +9,8 @@ open Suave.ServerErrors
 open Suave.Writers
 open Newtonsoft.Json
 
+open AgentUtilities
+
 type NewAnswer =
   {
     Text: string
@@ -84,9 +86,19 @@ let app =
         [ pathScan "/answer/%d" (fun id -> deleteAnswer id) ]
     ]
     
-
 [<EntryPoint>]
 let main argv =
+
+  let railway = Railways.buildRailway()
+  let railwayAgent = Railways.buildRailwayAgent Railways.calculateRailway railway
+
+  let basicHandler _ =
+    let now = DateTime.Now
+    printfn "tick %A" now
+    railwayAgent.Post(Railways.Tick(now))
+
+  let basicTimer = TimerUtilities.createTimer 1000 basicHandler
+  Async.Start basicTimer
 
   startWebServer defaultConfig app
 

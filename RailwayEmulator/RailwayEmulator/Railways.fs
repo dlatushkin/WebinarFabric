@@ -27,7 +27,7 @@ open System
   
         match msg with
         | Tick now ->
-          let newRailway = applyMessage railway msg
+          let newRailway = applyMessage railway now
           return! loop newRailway
         | Get channel ->
           channel.Reply railway
@@ -42,5 +42,12 @@ open System
   let getState (agent: MailboxProcessor<RailwayMessage>) = agent.PostAndReply Get
   
   let getStateAsync (agent: MailboxProcessor<RailwayMessage>) = agent.PostAndAsyncReply Get
-  
 
+  let buildRailway() = {
+    Lines = [| { Id = "L01"; Name = "1st Line"; Trains = [| { Number = "7001"}; {Number = "7002" } |] } |]
+  }
+
+  let calculateRailway (prevRailway:Railway) (now:DateTime) =
+    printfn "calculateRailway %A" now
+    let nextRailway = {prevRailway with Lines = [||]}
+    nextRailway

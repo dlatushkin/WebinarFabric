@@ -32,6 +32,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoardingService\BoardingService.csproj" />
     <ProjectReference Include="..\RailwaySensorService\RailwaySensorService.csproj" />
     <ProjectReference Include="..\TopologyService\TopologyService.csproj" />
     <ProjectReference Include="..\TrainsService\TrainsService.csproj" />

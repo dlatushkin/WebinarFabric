@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Railway Emulator</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("p").click(function() {
+                    console.log("click");
+                    $.get("http://localhost:8080/lines", function(data, status) {
+                        console.debug(data);
+                        console.debug(status);
+                    });
+                });
+
+                console.log("ready");
+                setInterval(tick, 1000);
+            });
+
+            function tick() {
+                // console.log("tick");
+                // $.get("http://localhost:8080/lines", function(data, status) {
+                //     console.debug(data);
+                //     console.debug(status);
+                // });
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <h1>Emulator</h1>
+            <p id="pLines">Lines</p>
+            <button>Load</button>
+        </div>
+    </body>
+</html>

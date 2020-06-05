@@ -45,9 +45,6 @@ let deleteAnswerFromDb id =
   true
 
 let getLines() =
-  //let lines = railwayAgent.PostAndReply(Railways.Get)
-  //printfn "getLines: %A" lines
-  //lines
   railwayAgent.PostAndReply(Railways.Get)
   |> JsonConvert.SerializeObject
   |> OK
@@ -86,12 +83,23 @@ let deleteAnswer id =
   else
     INTERNAL_ERROR "Couldn't delete resource"
 
+let setCORSHeaders =
+  addHeader  "Access-Control-Allow-Origin" "*" 
+  >=> setHeader "Access-Control-Allow-Headers" "token" 
+  >=> addHeader "Access-Control-Allow-Headers" "content-type" 
+  >=> addHeader "Access-Control-Allow-Methods" "GET,POST,PUT" 
+
 let app = 
   choose
-    [ GET >=> choose
-        [ path "/" >=> OK "Hello World"
-          path "/lines" >=> request (fun r -> getLines())
-          pathScan "/answer/%d" (fun id -> getAnswer id) ]
+    [ GET >=> 
+        fun context ->
+          context |> (
+            setCORSHeaders
+            >=> choose
+              [ path "/" >=> OK "Hello World"
+                path "/lines" >=> request (fun r -> getLines())
+                pathScan "/answer/%d" (fun id -> getAnswer id) ]
+          )
       POST >=> choose
         [ path "/answer" >=> createAnswer ]
       PUT >=> choose

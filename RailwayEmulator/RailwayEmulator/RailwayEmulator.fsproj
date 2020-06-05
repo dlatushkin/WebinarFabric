@@ -6,11 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="html\index.html" />
     <Compile Include="TimerUtilities.fs" />
     <Compile Include="AgentUtilities.fs" />
     <Compile Include="Railways.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

@@ -44,7 +44,10 @@ let updateAnswerDb answer =
 let deleteAnswerFromDb id = 
   true
 
-let getLines =
+let getLines() =
+  //let lines = railwayAgent.PostAndReply(Railways.Get)
+  //printfn "getLines: %A" lines
+  //lines
   railwayAgent.PostAndReply(Railways.Get)
   |> JsonConvert.SerializeObject
   |> OK
@@ -87,7 +90,7 @@ let app =
   choose
     [ GET >=> choose
         [ path "/" >=> OK "Hello World"
-          path "/lines" >=> getLines
+          path "/lines" >=> request (fun r -> getLines())
           pathScan "/answer/%d" (fun id -> getAnswer id) ]
       POST >=> choose
         [ path "/answer" >=> createAnswer ]

@@ -11,6 +11,7 @@ open System
   type Line = {
     Id: string
     Name: string
+    Length: float
     Trains: Train[]
   }
   
@@ -52,6 +53,7 @@ open System
           {
             Id = "L01"
             Name = "1st Line"
+            Length = 10.0
             Trains =
               [|
                 { Number = "7001"; Point = 0.0; Direction = 1.0 }
@@ -67,8 +69,19 @@ open System
       |> Seq.map (fun prevLine -> { prevLine with Trains =
         prevLine.Trains
         |> Seq.map (fun prevTrain ->
-          { prevTrain with
-            Point = prevTrain.Point + prevTrain.Direction } )
+          {
+            prevTrain with
+            Point = 
+              match prevTrain.Point with
+              | p when p > prevLine.Length -> prevLine.Length
+              | p when p < 0.0 -> 0.0
+              | p -> p + prevTrain.Direction
+            Direction = 
+              match prevTrain.Point with
+              | p when p > prevLine.Length -> -1.0
+              | p when p < 0.0 -> 1.0
+              | p -> prevTrain.Direction
+          } )
         |> Seq.toArray } )
       |> Seq.toArray }
     nextRailway

@@ -11,6 +11,10 @@ open Newtonsoft.Json
 
 open AgentUtilities
 
+let railway = Railways.buildRailway()
+let railwayAgent = Railways.buildRailwayAgent Railways.calculateRailway railway
+
+
 type NewAnswer =
   {
     Text: string
@@ -39,6 +43,12 @@ let updateAnswerDb answer =
 
 let deleteAnswerFromDb id = 
   true
+
+let getLines =
+  railwayAgent.PostAndReply(Railways.Get)
+  |> JsonConvert.SerializeObject
+  |> OK
+  >=> setMimeType "application/json"
 
 let getAnswer id =
   getAnswerFromDb id
@@ -77,6 +87,7 @@ let app =
   choose
     [ GET >=> choose
         [ path "/" >=> OK "Hello World"
+          path "/lines" >=> getLines
           pathScan "/answer/%d" (fun id -> getAnswer id) ]
       POST >=> choose
         [ path "/answer" >=> createAnswer ]
@@ -88,9 +99,6 @@ let app =
     
 [<EntryPoint>]
 let main argv =
-
-  let railway = Railways.buildRailway()
-  let railwayAgent = Railways.buildRailwayAgent Railways.calculateRailway railway
 
   let basicHandler _ =
     let now = DateTime.Now

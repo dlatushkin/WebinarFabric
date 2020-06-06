@@ -10,15 +10,23 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         <script>
             $(document).ready(function(){
-                $("button").click(function() {
+                $("#btnLoad").click(function() {
                     getData();
+                });
+
+                $("#btnPlayStop").click(function() {
+                    play = !play;
                 });
 
                 setInterval(tick, 1000);
             });
 
+            var play = false;
+
             function tick() {
-                getData();
+                if (play) {
+                    getData();
+                }
             }
 
             function getData() {
@@ -36,7 +44,7 @@
                                                         '<div class="emu-train-container-top">' +
                                                         '</div>' +
                                                     '</div>' +
-                                                    '<div class="container"></div>' +
+                                                    '<div class="emu-station-container"></div>' +
                                                     '<div class="container p-3 my-3 border">' +
                                                         '<div class="emu-train-container-bottom">' +
                                                         '</div>' +
@@ -54,30 +62,57 @@
 
                                 $('#' + lineElId + ' #' + trainElId).remove();
 
-                                var trainEls = $('#' + lineElId + ' #' + trainElId);
-                                if (trainEls.length === 0) {
+                                var trainStationsHtml = '';
+                                if (train.PrevStation) {
+                                    var fields0 = train.PrevStation.Fields[0];
+                                    trainStationsHtml += 'p:' + fields0.Station.Code;
+                                }
 
-                                    var trainHtml = '';
-                                    if (train.Direction > 0) {
-                                        var trainHtml = '<span class="emu-train">' +
-                                                            train.Number + ' ' + train.Point +
-                                                            '<i class="fa fa-angle-double-right"></i>' +
-                                                        '</span>';
-                                    } else {
-                                        var trainHtml = '<span class="emu-train">' +
-                                                            '<i class="fa fa-angle-double-left"></i>' +
-                                                            train.Number + ' ' + train.Point +
-                                                        '</span>';
-                                    }
+                                if (train.CurrStation) {
+                                    var fields0 = train.CurrStation.Fields[0];
+                                    trainStationsHtml += 'c:' + fields0.Station.Code;
+                                }
 
-                                    if (train.Direction > 0) {
-                                        trainEls = $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-top');
-                                    } else {
-                                        trainEls = $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-bottom');
-                                    }
+                                if (train.NextStation) {
+                                    var fields0 = train.NextStation.Fields[0];
+                                    trainStationsHtml += 'n:' + fields0.Station.Code;
+                                }
+
+                                if (train.Direction > 0) {
+                                    var trainHtml = '<span class="emu-train">' +
+                                                        trainStationsHtml + ' ' + train.Number + ' ' + train.Point +
+                                                        '<i class="fa fa-angle-double-right"></i>' +
+                                                    '</span>';
+                                } else {
+                                    var trainHtml = '<span class="emu-train">' +
+                                                        '<i class="fa fa-angle-double-left"></i>' +
+                                                        trainStationsHtml + ' ' + train.Number + ' ' + train.Point +
+                                                    '</span>';
+                                }
+
+                                if (train.Direction > 0) {
+                                    $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-top');
+                                } else {
+                                    $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-bottom');
                                 }
 
                                 $('#' + trainElId).css('left', train.Point + '%');
+                            }
+
+                            var stations = line.Stations;
+                            for(var iStation=0; iStation<stations.length; iStation++) {
+                                var station = stations[iStation];
+
+                                var stationElId = "sp" + station.Code;
+
+                                $('#' + lineElId + ' #' + stationElId).remove();
+
+                                var stationHtml = '<span class="emu-station">' + station.Code + '</span>';
+
+                                console.log(stationHtml);
+
+                                $(stationHtml).attr('id', stationElId).appendTo('#' + lineElId + ' .emu-station-container');
+                                $('#' + stationElId).css('left', station.FromPoint + '%');
                             }
                         }
                     });
@@ -88,35 +123,56 @@
             .emu-train-container-top {
                 position: relative;
                 width: 100%;
-                height: 50px;
+                height: 100px;
             }
 
             .emu-train-container-bottom {
                 position: relative;
                 width: 100%;
-                height: 50px;
+                height: 100px;
             }
 
             .emu-train {
                 position: absolute;
+                border: 1px solid black;
+                width: 150px;
+                height: 50px;
+            }
+
+            .emu-train-separator {
+                width: 10px;
+
+            }
+
+            .emu-station-container {
+                position: relative;
+                width: 100%;
+                height: 50px;
+            }
+
+            .emu-station {
+                position: absolute;
                 width: 100px;
                 height: 25px;
+                left: 50%;
             }
 
             .emu-train-777 {
                 position: absolute;
-                width: 100px;
-                height: 25px;
+                border: 1px solid black;
+                width: 150px;
+                height: 80px;
                 top: 0;
                 left: 5%;
             }
 
             .emu-train-778 {
                 position: absolute;
-                width: 100px;
+                border: 1px solid black;
+                width: 200px;
                 height: 25px;
                 top: 0;
-                left: 20%;
+                left: 40%;
             }
         </style>
     </head>
@@ -125,14 +181,50 @@
         <div class="container-fluid">
             <h1>Railway Emulator</h1>
             <div id="dvLines">
-                <!-- <div class="container p-3 my-3 border">
+
+                <div class="container p-3 my-3 border">
                     Line 01
                     <div class="container p-3 my-3 border">
 
                         <div class="emu-train-container-top">
                             <span class="emu-train-777">
-                                777 10.0
-                                <i class="fa fa-angle-double-right"></i>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>STV</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PAR</td>
+                                                    <td>22:13:55</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>OSL</td>
+                                                    <td>22:03:22</td>                                                    
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td class="emu-train-separator"></td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>777</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-angle-double-right"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.0</td>
+                                                </tr>
+                                            </table>
+                                            
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                                
                             </span>
                             <span class="emu-train-778">
                                 778 10.0
@@ -140,7 +232,11 @@
                             </span>
                         </div>
 
-                        <div class="container"></div>
+                        <div class="emu-station-container">
+                            <span class="emu-station" style="left: 12%;">OSL</span>
+                            <span class="emu-station" style="left: 22%;">PAR</span>
+                            <span class="emu-station" style="left: 92%;">STV</span>
+                        </div>
 
                         <div class="emu-train-container-bottom">
                             <span class="emu-train-777">
@@ -154,11 +250,13 @@
                         </div>
 
                     </div>
-                </div> -->
-
+                </div>
 
             </div>
-            <!-- <button>Load</button> -->
+            <!-- <button id="btnLoad">Load</button> -->
+            <button id="btnPlayStop">
+                <i class="fa fa-pause"></i>
+            </button>
         </div>
     </body>
 </html>

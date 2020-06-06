@@ -1,18 +1,26 @@
 ﻿module Railways
 
 open System
-  
-  type Train = {
-    Number: string
-    Point: float
-    Direction: float
-  }
 
   type Station = {
     Code: string
     Name: string
     FromPoint: float
     ToPoint: float
+  }
+
+  type TrainStation = {
+    Station: Station
+    Moment: Option<DateTime>
+  }
+  
+  type Train = {
+    Number: string
+    Point: float
+    Direction: float
+    PrevStation: Option<TrainStation>
+    CurrStation: Option<TrainStation>
+    NextStation: Option<TrainStation>
   }
   
   type Line = {
@@ -64,13 +72,15 @@ open System
             Length = 100.0
             Stations =
               [|
-                { Code = "OSL"; Name = "Oslo"; FromPoint = 10.0; ToPoint = 12.0 }
+                { Code = "OSL"; Name = "Oslo"; FromPoint = 10.5; ToPoint = 12.5 }
+                { Code = "PAR"; Name = "Paradise"; FromPoint = 20.5; ToPoint = 22.5 }
+                { Code = "STV"; Name = "Stavanger"; FromPoint = 90.5; ToPoint = 92.5 }
               |]
             Trains =
               [|
-                { Number = "7001"; Point = 0.5; Direction = 1.5 }
-                { Number = "7002"; Point = 75.5; Direction = 1.5 }
-                { Number = "7003"; Point = 50.5; Direction = -1.5 }
+                { Number = "7001"; Point = 0.5; Direction = 1.0; PrevStation = None; CurrStation = None; NextStation = None }
+                { Number = "7002"; Point = 75.5; Direction = 1.0; PrevStation = None; CurrStation = None; NextStation = None  }
+                { Number = "7003"; Point = 50.5; Direction = -1.0; PrevStation = None; CurrStation = None; NextStation = None  }
               |]
           }
         |]
@@ -93,15 +103,32 @@ open System
         | _ -> 1
     | None -> failwithf "is out of range"
 
+  let getNextStation(line:Line, point:float, direction:float) =
+    match point with
+    | p when p < 0.0 -> line.Stations |> Array.tryHead
+    | p when p > line.Length  -> line.Stations |> Array.tryLast
+    | p ->
+      match direction with
+      | d when d >= 0.0 -> line.Stations |> Array.tryFind(fun e -> e.FromPoint > p)
+      | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint < p)
 
+  let getCurrStation(line:Line, point:float, direction:float) =
+    match point with
+    | p when p < 0.0 -> None
+    | p when p > line.Length -> None
+    | p ->
+      match direction with
+      | d when d >= 0.0 -> line.Stations |> Array.tryFind(fun e -> e.FromPoint <= p && p <= e.ToPoint)
+      | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint >= p && p >= e.FromPoint )
 
-  let getStation(line:Line, point:float, direction:float) =
-    match point, direction with
-    | p, d when p < 0.0 -> line.Stations |> Array.tryHead, None, line.Stations |> Array.tryHead
-    | p, d when p > line.Length -> line.Stations |> Array.tryLast, None, line.Stations |> Array.tryLast
-    | p, d -> match d with
-              | d when d > 0.0 -> None, None, None
-              | d -> None, None, None
+  let getPrevStation(line:Line, point:float, direction:float) =
+    match point with
+    | p when p < 0.0 -> line.Stations |> Array.tryHead
+    | p when p > line.Length  -> line.Stations |> Array.tryLast
+    | p ->
+      match direction with
+      | d when d >= 0.0 -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint < p)
+      | _ -> line.Stations |> Array.tryFind(fun e -> e.FromPoint > p)
 
   let calculateRailway (prevRailway:Railway) (now:DateTime) =
     printfn "calculateRailway %A" now
@@ -120,8 +147,21 @@ open System
               match prevTrain.Point with
               | p when p > prevLine.Length -> -1.0
               | p when p < 0.0 -> 1.0
-              | p -> prevTrain.Direction
+              | _ -> prevTrain.Direction
           } )
+        |> Seq.map(fun train ->
+          let currStation = getCurrStation(prevLine, train.Point, train.Direction);
+          let currTrainStation = match currStation with | Some ts -> Some { Station = ts; Moment = Some now } | _ -> None;
+          let nextStation = getNextStation(prevLine, train.Point, train.Direction);
+          let nextTrainStation = match nextStation with | Some ts -> Some { Station = ts; Moment = None } | _ -> None;
+          {
+            train with
+            PrevStation = match train.CurrStation, currTrainStation with
+                          | (Some, None) ->  train.CurrStation
+                          | _ -> train.PrevStation
+            CurrStation = currTrainStation
+            NextStation = nextTrainStation
+          })
         |> Seq.toArray } )
       |> Seq.toArray }
     nextRailway

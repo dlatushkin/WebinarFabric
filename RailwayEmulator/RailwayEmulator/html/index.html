@@ -11,29 +11,96 @@
         <script>
             $(document).ready(function(){
                 $("button").click(function() {
-                    $.get("http://localhost:8080/lines", function(data) {
-                        console.log(data);
-                        var lines = data.Lines;
-                        for (var i=0; i<lines.length; i++) {
-                            var line = lines[i];
-                            console.log(line);
-                            $("#dvLines").append(line.Id);
-                        }
-                    });
+                    getData();
                 });
 
-                console.log("ready");
                 setInterval(tick, 1000);
             });
 
             function tick() {
+                getData();
             }
+
+            function getData() {
+                $.get("http://localhost:8080/lines", function(data) {
+                        var lines = data.Lines;
+                        for (var iLine=0; iLine<lines.length; iLine++) {
+                            var line = lines[iLine];
+
+                            var lineElId = "dv" + line.Id;
+                            var lineEls = $('#dvLines > #' + lineElId);
+                            if (lineEls.length === 0) {
+                                var lineHtml = '<div class="container p-3 my-3 border">' +
+                                                    line.Name +
+                                                    '<div class="container p-3 my-3 border">' +
+                                                        '<div class="emu-train-container-top">' +
+                                                        '</div>' +
+                                                    '</div>' +
+                                                    '<div class="container"></div>' +
+                                                    '<div class="container p-3 my-3 border">' +
+                                                        '<div class="emu-train-container-bottom">' +
+                                                        '</div>' +
+                                                    '</div>' +
+                                                '</div>';
+
+                                lineEls = $(lineHtml).attr('id', lineElId).appendTo('#dvLines');
+                            }
+
+                            var trains = line.Trains;
+                            for (var iTrain=0; iTrain<trains.length; iTrain++) {
+                                var train = trains[iTrain];
+
+                                var trainElId = "sp" + train.Number;
+
+                                $('#' + lineElId + ' #' + trainElId).remove();
+
+                                var trainEls = $('#' + lineElId + ' #' + trainElId);
+                                if (trainEls.length === 0) {
+
+                                    var trainHtml = '';
+                                    if (train.Direction > 0) {
+                                        var trainHtml = '<span class="emu-train">' +
+                                                            train.Number + ' ' + train.Point +
+                                                            '<i class="fa fa-angle-double-right"></i>' +
+                                                        '</span>';
+                                    } else {
+                                        var trainHtml = '<span class="emu-train">' +
+                                                            '<i class="fa fa-angle-double-left"></i>' +
+                                                            train.Number + ' ' + train.Point +
+                                                        '</span>';
+                                    }
+
+                                    if (train.Direction > 0) {
+                                        trainEls = $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-top');
+                                    } else {
+                                        trainEls = $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-bottom');
+                                    }
+                                }
+
+                                $('#' + trainElId).css('left', train.Point + '%');
+                            }
+                        }
+                    });
+            }
+
         </script>
         <style>
-            .emu-train-container {
+            .emu-train-container-top {
                 position: relative;
                 width: 100%;
                 height: 50px;
+            }
+
+            .emu-train-container-bottom {
+                position: relative;
+                width: 100%;
+                height: 50px;
+            }
+
+            .emu-train {
+                position: absolute;
+                width: 100px;
+                height: 25px;
             }
 
             .emu-train-777 {
@@ -51,24 +118,6 @@
                 top: 0;
                 left: 20%;
             }
-
-            .emu-train-01 {
-                width: 100px;
-                height: 25px;
-                text-align: center;
-                position: relative;
-                left: 10px;
-                top: 5px;
-            }
-
-            .emu-train-02 {
-                width: 100px;
-                height: 25px;
-                text-align: center;
-                position: relative;
-                left: 10px;
-                top: 5px;
-            }
         </style>
     </head>
 
@@ -76,32 +125,40 @@
         <div class="container-fluid">
             <h1>Railway Emulator</h1>
             <div id="dvLines">
-                <div class="container p-3 my-3 border">
+                <!-- <div class="container p-3 my-3 border">
                     Line 01
                     <div class="container p-3 my-3 border">
 
-                        <div class="emu-train-container">
-
+                        <div class="emu-train-container-top">
                             <span class="emu-train-777">
                                 777 10.0
                                 <i class="fa fa-angle-double-right"></i>
                             </span>
-
                             <span class="emu-train-778">
                                 778 10.0
                                 <i class="fa fa-angle-double-right"></i>
                             </span>
+                        </div>
 
+                        <div class="container"></div>
+
+                        <div class="emu-train-container-bottom">
+                            <span class="emu-train-777">
+                                <i class="fa fa-angle-double-left"></i>
+                                777 10.0
+                            </span>
+                            <span class="emu-train-778">
+                                <i class="fa fa-angle-double-left"></i>
+                                778 10.0
+                            </span>
                         </div>
 
                     </div>
-                </div>
-                <div class="container p-3 my-3 border">
-                    Line 02
-                    
-                </div>
+                </div> -->
+
+
             </div>
-            <button>Load</button>
+            <!-- <button>Load</button> -->
         </div>
     </body>
 </html>

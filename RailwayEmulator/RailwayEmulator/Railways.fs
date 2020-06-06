@@ -53,11 +53,12 @@ open System
           {
             Id = "L01"
             Name = "1st Line"
-            Length = 10.0
+            Length = 100.0
             Trains =
               [|
                 { Number = "7001"; Point = 0.0; Direction = 1.0 }
-                { Number = "7002"; Point = 10.0; Direction = 1.0 }
+                { Number = "7002"; Point = 75.0; Direction = 1.0 }
+                { Number = "7003"; Point = 50.0; Direction = -1.0 }
               |]
           }
         |]

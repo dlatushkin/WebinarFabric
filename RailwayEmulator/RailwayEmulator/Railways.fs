@@ -76,12 +76,23 @@ open System
         |]
     }
 
-  let getNextStation (line:Line, station:Station, direction:float) =
+  let getNextStationIdx (line:Line, station:Station, direction:float) =
     let stationIndex = line.Stations |> Array.tryFindIndex(fun e -> e = station)
-    let isLastStation = line.Stations.Length - 1
+    let stationCount = line.Stations.Length
     match stationIndex with
-    | si -> si
-    | si -> failwithf "%A is out of range" si
+    | Some si ->
+        match direction with
+        | d when d > 0.0 ->
+            match si with
+            | i when i = stationCount -> 0
+            | i -> i + 1
+        | _ ->
+            match si with
+            | 0 -> stationCount
+            | i -> i - 1
+        | _ -> 1
+    | None -> failwithf "is out of range"
+
 
 
   let getStation(line:Line, point:float, direction:float) =

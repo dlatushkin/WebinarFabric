@@ -7,12 +7,20 @@ open System
     Point: float
     Direction: float
   }
+
+  type Station = {
+    Code: string
+    Name: string
+    FromPoint: float
+    ToPoint: float
+  }
   
   type Line = {
     Id: string
     Name: string
     Length: float
     Trains: Train[]
+    Stations: Station[]
   }
   
   type Railway = {
@@ -54,15 +62,35 @@ open System
             Id = "L01"
             Name = "1st Line"
             Length = 100.0
+            Stations =
+              [|
+                { Code = "OSL"; Name = "Oslo"; FromPoint = 10.0; ToPoint = 12.0 }
+              |]
             Trains =
               [|
-                { Number = "7001"; Point = 0.0; Direction = 1.0 }
-                { Number = "7002"; Point = 75.0; Direction = 1.0 }
-                { Number = "7003"; Point = 50.0; Direction = -1.0 }
+                { Number = "7001"; Point = 0.5; Direction = 1.5 }
+                { Number = "7002"; Point = 75.5; Direction = 1.5 }
+                { Number = "7003"; Point = 50.5; Direction = -1.5 }
               |]
           }
         |]
     }
+
+  let getNextStation (line:Line, station:Station, direction:float) =
+    let stationIndex = line.Stations |> Array.tryFindIndex(fun e -> e = station)
+    let isLastStation = line.Stations.Length - 1
+    match stationIndex with
+    | si -> si
+    | si -> failwithf "%A is out of range" si
+
+
+  let getStation(line:Line, point:float, direction:float) =
+    match point, direction with
+    | p, d when p < 0.0 -> line.Stations |> Array.tryHead, None, line.Stations |> Array.tryHead
+    | p, d when p > line.Length -> line.Stations |> Array.tryLast, None, line.Stations |> Array.tryLast
+    | p, d -> match d with
+              | d when d > 0.0 -> None, None, None
+              | d -> None, None, None
 
   let calculateRailway (prevRailway:Railway) (now:DateTime) =
     printfn "calculateRailway %A" now

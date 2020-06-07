@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClusterModels\ClusterModels.csproj" />
     <ProjectReference Include="..\HelpersCommon\HelpersCommon.csproj" />
     <ProjectReference Include="..\ServiceCommon\ServiceCommon.csproj" />
-    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ namespace WebApiWebinarService
     /// <summary>
     /// The FabricRuntime creates an instance of this class for each service type instance. 
     /// </summary>
-    internal sealed class WebApiWebinarService : StatelessService
+    public class WebApiWebinarService : StatelessService
     {
         public WebApiWebinarService(StatelessServiceContext context)
             : base(context)

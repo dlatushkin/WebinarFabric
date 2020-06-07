@@ -1,16 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Fabric;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Services.Runtime;
+using ServiceCommon;
 
 namespace TopologyService
 {
     [EventSource(Name = "MyCompany-WebinarFabric-TopologyService")]
-    internal sealed class ServiceEventSource : EventSource
+    internal sealed class ServiceEventSource : EventSource, IServiceEventSource
     {
         public static readonly ServiceEventSource Current = new ServiceEventSource();
 

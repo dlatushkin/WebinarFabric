@@ -17,7 +17,7 @@ namespace TopologyService
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class TopologyService : BaseStatefulService, ITopologyService
+    public class TopologyService : BaseStatefulService, ITopologyService
     {
         private readonly Dictionary<Line, Station[]> _lineStations = new Dictionary<Line, Station[]>();
 

@@ -8,6 +8,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
         <script>
             $(document).ready(function(){
                 $("#btnLoad").click(function() {
@@ -62,41 +63,53 @@
 
                                 $('#' + lineElId + ' #' + trainElId).remove();
 
-                                var trainStationsHtml = '';
+                                var trainPrevCode = '-';
+                                var trainPrevMoment = '';
                                 if (train.PrevStation) {
                                     var fields0 = train.PrevStation.Fields[0];
-                                    trainStationsHtml += 'p:' + fields0.Station.Code;
+                                    trainPrevCode = fields0.Station.Code;
+                                    trainPrevMoment = moment(fields0.Moment.Fields[0]).format('HH:mm:ss');
                                 }
 
+                                var trainCurrCode = '-';
+                                var trainCurrMoment = '';
                                 if (train.CurrStation) {
                                     var fields0 = train.CurrStation.Fields[0];
-                                    trainStationsHtml += 'c:' + fields0.Station.Code;
+                                    trainCurrCode = fields0.Station.Code;
+                                    trainCurrMoment = moment(fields0.Moment.Fields[0]).format('HH:mm:ss');
                                 }
 
+                                var trainNextCode = '-';
                                 if (train.NextStation) {
                                     var fields0 = train.NextStation.Fields[0];
-                                    trainStationsHtml += 'n:' + fields0.Station.Code;
+                                    trainNextCode = fields0.Station.Code;
                                 }
 
                                 if (train.Direction > 0) {
-                                    var trainHtml = '<span class="emu-train">' +
-                                                        trainStationsHtml + ' ' + train.Number + ' ' + train.Point +
-                                                        '<i class="fa fa-angle-double-right"></i>' +
-                                                    '</span>';
+                                    var trainEl = $("#spTrainForthTemplate")
+                                        .clone()
+                                        .attr('id', trainElId)
+                                        .appendTo('#' + lineElId + ' .emu-train-container-top');
                                 } else {
-                                    var trainHtml = '<span class="emu-train">' +
-                                                        '<i class="fa fa-angle-double-left"></i>' +
-                                                        trainStationsHtml + ' ' + train.Number + ' ' + train.Point +
-                                                    '</span>';
+                                    var trainEl = $("#spTrainBackTemplate")
+                                        .clone()
+                                        .attr('id', trainElId)
+                                        .appendTo('#' + lineElId + ' .emu-train-container-bottom');
                                 }
 
-                                if (train.Direction > 0) {
-                                    $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-top');
-                                } else {
-                                    $(trainHtml).attr('id', trainElId).appendTo('#' + lineElId + ' .emu-train-container-bottom');
-                                }
+                                $('#' + trainElId + ' .emu-train-number').text(train.Number);
+                                $('#' + trainElId + ' .emu-train-point').text(train.Point);
+
+                                $('#' + trainElId + ' .emu-train-next-code').text(trainNextCode);
+
+                                $('#' + trainElId + ' .emu-train-curr-code').text(trainCurrCode);
+                                $('#' + trainElId + ' .emu-train-curr-moment').text(trainCurrMoment);
+
+                                $('#' + trainElId + ' .emu-train-prev-code').text(trainPrevCode);
+                                $('#' + trainElId + ' .emu-train-prev-moment').text(trainPrevMoment);
 
                                 $('#' + trainElId).css('left', train.Point + '%');
+                                $('#' + trainElId).css('display', 'block');
                             }
 
                             var stations = line.Stations;
@@ -108,8 +121,6 @@
                                 $('#' + lineElId + ' #' + stationElId).remove();
 
                                 var stationHtml = '<span class="emu-station">' + station.Code + '</span>';
-
-                                console.log(stationHtml);
 
                                 $(stationHtml).attr('id', stationElId).appendTo('#' + lineElId + ' .emu-station-container');
                                 $('#' + stationElId).css('left', station.FromPoint + '%');
@@ -132,11 +143,18 @@
                 height: 100px;
             }
 
-            .emu-train {
+            .emu-train-forth {
                 position: absolute;
                 border: 1px solid black;
                 width: 150px;
-                height: 50px;
+                height: 80px;
+            }
+
+            .emu-train-back {
+                position: absolute;
+                border: 1px solid black;
+                width: 150px;
+                height: 80px;
             }
 
             .emu-train-separator {
@@ -182,27 +200,27 @@
             <h1>Railway Emulator</h1>
             <div id="dvLines">
 
-                <div class="container p-3 my-3 border">
+                <div class="container p-3 my-3 border" style="display: none;">
                     Line 01
                     <div class="container p-3 my-3 border">
 
                         <div class="emu-train-container-top">
-                            <span class="emu-train-777">
+                            <span id="spTrainForthTemplate" class="emu-train-forth">
                                 <table>
                                     <tr>
                                         <td>
                                             <table>
                                                 <tr>
-                                                    <td>STV</td>
+                                                    <td class="emu-train-next-code">STV</td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>PAR</td>
-                                                    <td>22:13:55</td>
+                                                    <td class="emu-train-curr-code">PAR</td>
+                                                    <td class="emu-train-curr-moment">22:13:55</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>OSL</td>
-                                                    <td>22:03:22</td>                                                    
+                                                    <td class="emu-train-prev-code">OSL</td>
+                                                    <td class="emu-train-prev-moment">22:03:22</td>                                                    
                                                 </tr>
                                             </table>
                                         </td>
@@ -210,22 +228,20 @@
                                         <td>
                                             <table>
                                                 <tr>
-                                                    <td>777</td>
+                                                    <td class="emu-train-number">777</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fa fa-angle-double-right"></i></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>10.0</td>
+                                                    <td class="emu-train-point">10.0</td>
                                                 </tr>
                                             </table>
-                                            
-                                            
                                         </td>
                                     </tr>
                                 </table>
-                                
                             </span>
+
                             <span class="emu-train-778">
                                 778 10.0
                                 <i class="fa fa-angle-double-right"></i>
@@ -239,14 +255,48 @@
                         </div>
 
                         <div class="emu-train-container-bottom">
-                            <span class="emu-train-777">
-                                <i class="fa fa-angle-double-left"></i>
-                                777 10.0
+
+                            <span id="spTrainBackTemplate" class="emu-train-back">
+                                <table>
+                                    <tr>
+
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td class="emu-train-number">777</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-angle-double-left"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="emu-train-point">10.0</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                        <td class="emu-train-separator"></td>
+
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td class="emu-train-next-code">STV</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="emu-train-curr-code">PAR</td>
+                                                    <td class="emu-train-curr-moment">22:13:55</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="emu-train-prev-code">OSL</td>
+                                                    <td class="emu-train-prev-moment">22:03:22</td>                                                    
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                    </tr>
+                                </table>
                             </span>
-                            <span class="emu-train-778">
-                                <i class="fa fa-angle-double-left"></i>
-                                778 10.0
-                            </span>
+
                         </div>
 
                     </div>

@@ -94,37 +94,51 @@ open System
         match direction with
         | d when d > 0.0 ->
             match si with
-            | i when i = stationCount -> 0
+            | i when i = stationCount - 1 -> 0
             | i -> i + 1
         | _ ->
             match si with
-            | 0 -> stationCount
+            | 0 -> stationCount - 1
             | i -> i - 1
         | _ -> 1
     | None -> failwithf "is out of range"
 
+  let getNextStationByCurrStation (line:Line, station:Station, direction:float) =
+      let nextStationIndex = getNextStationIdx (line, station, direction)
+      line.Stations.[nextStationIndex]
+
+  let getStationLimits (line:Line) =
+    let first = line.Stations |> Array.tryHead
+    let last = line.Stations |> Array.tryLast
+    match first, last with 
+    | (Some f, Some l) -> (f.FromPoint, l.ToPoint) 
+    | _, _ -> (0.0, line.Length)
+
   let getNextStation(line:Line, point:float, direction:float) =
+    let fromPoint, toPoint = getStationLimits line
     match point with
-    | p when p < 0.0 -> line.Stations |> Array.tryHead
-    | p when p > line.Length  -> line.Stations |> Array.tryLast
+    | p when p < fromPoint -> line.Stations |> Array.tryHead
+    | p when p > toPoint  -> line.Stations |> Array.tryLast
     | p ->
       match direction with
       | d when d >= 0.0 -> line.Stations |> Array.tryFind(fun e -> e.FromPoint > p)
       | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint < p)
 
   let getCurrStation(line:Line, point:float, direction:float) =
+    let fromPoint, toPoint = getStationLimits line
     match point with
-    | p when p < 0.0 -> None
-    | p when p > line.Length -> None
+    | p when p < fromPoint -> None
+    | p when p > toPoint -> None
     | p ->
       match direction with
       | d when d >= 0.0 -> line.Stations |> Array.tryFind(fun e -> e.FromPoint <= p && p <= e.ToPoint)
       | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint >= p && p >= e.FromPoint )
 
   let getPrevStation(line:Line, point:float, direction:float) =
+    let fromPoint, toPoint = getStationLimits line
     match point with
-    | p when p < 0.0 -> line.Stations |> Array.tryHead
-    | p when p > line.Length  -> line.Stations |> Array.tryLast
+    | p when p < fromPoint -> line.Stations |> Array.tryHead
+    | p when p > toPoint  -> line.Stations |> Array.tryLast
     | p ->
       match direction with
       | d when d >= 0.0 -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint < p)
@@ -152,7 +166,14 @@ open System
         |> Seq.map(fun train ->
           let currStation = getCurrStation(prevLine, train.Point, train.Direction);
           let currTrainStation = match currStation with | Some ts -> Some { Station = ts; Moment = Some now } | _ -> None;
-          let nextStation = getNextStation(prevLine, train.Point, train.Direction);
+
+          let nextStation =
+            match currStation with
+            | Some s -> 
+              let nextStationByCurrStation = getNextStationByCurrStation(prevLine, s, train.Direction)
+              Some nextStationByCurrStation
+            | None -> getNextStation(prevLine, train.Point, train.Direction)
+
           let nextTrainStation = match nextStation with | Some ts -> Some { Station = ts; Moment = None } | _ -> None;
           {
             train with

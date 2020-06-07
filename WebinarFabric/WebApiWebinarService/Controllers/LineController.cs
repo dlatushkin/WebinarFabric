@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ServiceCommon;
 
 namespace WebApiWebinarService.Controllers
 {
@@ -11,17 +12,18 @@ namespace WebApiWebinarService.Controllers
     [Route("api/lines")]
     public class LineController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IRemoteServices _remoteServices;
 
-        public LineController(ILogger<WeatherForecastController> logger)
+        public LineController(IRemoteServices remoteServices)
         {
-            _logger = logger;
+            _remoteServices = remoteServices;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return await Task.FromResult(Ok());
+            var lines = await _remoteServices.TopologyService.GetLinesAsync();
+            return Ok(lines);
         }
     }
 }

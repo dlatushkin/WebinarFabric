@@ -21,7 +21,6 @@ namespace TopologyService
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 

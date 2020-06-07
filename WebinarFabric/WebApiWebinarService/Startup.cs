@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ServiceCommon;
 
 namespace WebApiWebinarService
 {
@@ -24,6 +25,9 @@ namespace WebApiWebinarService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ITimeSource, TimeSource>();
+            services.AddScoped<IRemoteServices, RemoteServices>();
+
             services.AddControllers();
         }
 

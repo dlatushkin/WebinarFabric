@@ -17,7 +17,7 @@ namespace ServiceCommon
         {
             var applicationNamePrefix = $"{Environment.GetEnvironmentVariable("Fabric_ApplicationName")}/";
 
-            var topolodgyServiceUrl = applicationNamePrefix + "TopologyService.TopologyService";
+            var topolodgyServiceUrl = applicationNamePrefix + "TopologyService";
             _topologyService =
                 new Lazy<ITopologyService>(
                     () => ServiceProxy.Create<ITopologyService>(

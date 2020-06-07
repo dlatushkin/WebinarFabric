@@ -50,6 +50,14 @@ let getLines() =
   |> OK
   >=> setMimeType "application/json"
 
+let getTopology() =
+  let railway = railwayAgent.PostAndReply(Railways.Get)
+  railway.Lines
+  |> Array.map(fun l -> {| Id = l.Id; Name = l.Name; Length = l.Length |})
+  |> JsonConvert.SerializeObject
+  |> OK
+  >=> setMimeType "application/json"
+
 let getAnswer id =
   getAnswerFromDb id
   |> JsonConvert.SerializeObject
@@ -98,6 +106,7 @@ let app =
             >=> choose
               [ path "/" >=> OK "Hello World"
                 path "/lines" >=> request (fun r -> getLines())
+                path "/topology" >=> request(fun r -> getTopology())
                 pathScan "/answer/%d" (fun id -> getAnswer id) ]
           )
       POST >=> choose

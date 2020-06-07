@@ -3,9 +3,6 @@
   <Parameters>
     <Parameter Name="BoardingService_InstanceCount" DefaultValue="-1" />
     <Parameter Name="WagonGpsService_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="RailwaySensorService_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="RailwaySensorService_PartitionCount" DefaultValue="1" />
-    <Parameter Name="RailwaySensorService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TrainsService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TrainsService_PartitionCount" DefaultValue="1" />
     <Parameter Name="TrainsService_TargetReplicaSetSize" DefaultValue="3" />
@@ -24,10 +21,6 @@
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WagonGpsServicePkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
-  </ServiceManifestImport>
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="RailwaySensorServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
@@ -60,11 +53,6 @@
       <StatelessService ServiceTypeName="WagonGpsServiceType" InstanceCount="[WagonGpsService_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
-    </Service>
-    <Service Name="RailwaySensorService" ServicePackageActivationMode="ExclusiveProcess">
-      <StatefulService ServiceTypeName="RailwaySensorServiceType" TargetReplicaSetSize="[RailwaySensorService_TargetReplicaSetSize]" MinReplicaSetSize="[RailwaySensorService_MinReplicaSetSize]">
-        <UniformInt64Partition PartitionCount="[RailwaySensorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
-      </StatefulService>
     </Service>
     <Service Name="TrainsService" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="TrainsServiceType" TargetReplicaSetSize="[TrainsService_TargetReplicaSetSize]" MinReplicaSetSize="[TrainsService_MinReplicaSetSize]">

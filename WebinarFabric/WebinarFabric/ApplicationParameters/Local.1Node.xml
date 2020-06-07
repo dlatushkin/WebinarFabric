@@ -3,9 +3,6 @@
   <Parameters>
     <Parameter Name="BoardingService_InstanceCount" Value="1" />
     <Parameter Name="WagonGpsService_InstanceCount" Value="1" />
-    <Parameter Name="RailwaySensorService_PartitionCount" Value="1" />
-    <Parameter Name="RailwaySensorService_MinReplicaSetSize" Value="1" />
-    <Parameter Name="RailwaySensorService_TargetReplicaSetSize" Value="1" />
     <Parameter Name="TrainsService_PartitionCount" Value="1" />
     <Parameter Name="TrainsService_MinReplicaSetSize" Value="1" />
     <Parameter Name="TrainsService_TargetReplicaSetSize" Value="1" />

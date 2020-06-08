@@ -5,7 +5,6 @@
     <Parameter Name="GpsPositionService_PartitionCount" DefaultValue="1" />
     <Parameter Name="GpsPositionService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TrainService_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="BoardingService_InstanceCount" DefaultValue="-1" />
     <Parameter Name="TopologyService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TopologyService_PartitionCount" DefaultValue="1" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" DefaultValue="3" />
@@ -25,10 +24,6 @@
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="TrainServicePkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
-  </ServiceManifestImport>
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="BoardingServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
@@ -58,11 +53,6 @@
     </Service>
     <Service Name="TrainService" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="TrainServiceType" InstanceCount="[TrainService_InstanceCount]">
-        <SingletonPartition />
-      </StatelessService>
-    </Service>
-    <Service Name="BoardingService" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="BoardingServiceType" InstanceCount="[BoardingService_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
     </Service>

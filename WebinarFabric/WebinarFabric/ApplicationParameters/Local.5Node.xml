@@ -5,7 +5,6 @@
     <Parameter Name="GpsPositionService_MinReplicaSetSize" Value="3" />
     <Parameter Name="GpsPositionService_TargetReplicaSetSize" Value="3" />
     <Parameter Name="TrainService_InstanceCount" Value="1" />
-    <Parameter Name="BoardingService_InstanceCount" Value="1" />
     <Parameter Name="TopologyService_PartitionCount" Value="1" />
     <Parameter Name="TopologyService_MinReplicaSetSize" Value="3" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" Value="3" />

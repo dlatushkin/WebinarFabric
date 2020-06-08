@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Fabric;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Services.Runtime;
+using ServiceCommon;
 
 namespace TrainService
 {
     [EventSource(Name = "MyCompany-WebinarFabric-TrainService")]
-internal sealed class ServiceEventSource : EventSource
-{
+internal sealed class ServiceEventSource : EventSource, IServiceEventSource
+    {
     public static readonly ServiceEventSource Current = new ServiceEventSource();
 
     // Instance constructor is private to enforce singleton semantics

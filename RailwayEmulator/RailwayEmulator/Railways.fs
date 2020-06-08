@@ -94,11 +94,11 @@ open System
         match direction with
         | d when d > 0.0 ->
             match si with
-            | i when i = stationCount - 1 -> 0
+            | i when i = stationCount - 1 -> stationCount - 1
             | i -> i + 1
         | _ ->
             match si with
-            | 0 -> stationCount - 1
+            | 0 -> 0
             | i -> i - 1
         | _ -> 1
     | None -> failwithf "is out of range"

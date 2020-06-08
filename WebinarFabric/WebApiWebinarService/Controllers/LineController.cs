@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using ServiceCommon;
 
 namespace WebApiWebinarService.Controllers
@@ -24,6 +20,13 @@ namespace WebApiWebinarService.Controllers
         {
             var lines = await _remoteServices.TopologyService.GetLinesAsync();
             return Ok(lines);
+        }
+
+        [HttpGet("{lineId}/stations")]
+        public async Task<IActionResult> Get(string lineId)
+        {
+            var stations = await _remoteServices.TopologyService.GetStationsAsync(lineId);
+            return Ok(stations);
         }
     }
 }

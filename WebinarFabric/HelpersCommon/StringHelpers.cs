@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace HelpersCommon
+
 {
     public static class StringHelpers
     {

@@ -63,11 +63,11 @@ let getFlatTrains() =
   railway.Lines
   |> fun lines -> seq { for l in lines do
                           for t in l.Trains do
-                            yield t }
+                            yield {| Line = l; Train = t |} }
 
 let getTrainPositions() =
   getFlatTrains()
-  |> Seq.map(fun t -> {| Number = t.Number; Point = t.Point |})
+  |> Seq.map(fun t -> {| LineId = t.Line.Id; Number = t.Train.Number; Point = t.Train.Point |})
 
 let getTrainPositionsWebResponse() = 
   getTrainPositions()

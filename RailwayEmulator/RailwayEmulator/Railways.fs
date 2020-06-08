@@ -132,7 +132,7 @@ open System
     | p ->
       match direction with
       | d when d >= 0.0 -> line.Stations |> Array.tryFind(fun e -> e.FromPoint <= p && p <= e.ToPoint)
-      | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint >= p && p >= e.FromPoint )
+      | _ -> line.Stations |> Array.rev |> Array.tryFind(fun e -> e.ToPoint >= p && p >= e.FromPoint)
 
   let getPrevStation(line:Line, point:float, direction:float) =
     let fromPoint, toPoint = getStationLimits line

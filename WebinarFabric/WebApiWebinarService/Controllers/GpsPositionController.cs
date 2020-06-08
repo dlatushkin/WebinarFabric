@@ -24,7 +24,7 @@ namespace WebApiWebinarService.Controllers
             var trainModels = await _remoteServices.GpsPositionService.GetTrainsPositionAsync();
 
             var trainEntries = trainModels
-                .Select(t => new TrainPositionEntry { Number = t.Number, Point = t.Point })
+                .Select(t => new TrainPositionEntry { LineId = t.LineId, Number = t.Number, Point = t.Point })
                 .ToArray();
 
             return Ok(trainEntries);
@@ -34,7 +34,7 @@ namespace WebApiWebinarService.Controllers
         public async Task<IActionResult> Post(TrainPositionEntry[] trainPositions)
         {
             var trainModels = trainPositions
-                .Select(t => new TrainPosition { Number = t.Number, Point = t.Point })
+                .Select(t => new TrainPosition { LineId = t.LineId, Number = t.Number, Point = t.Point })
                 .ToArray();
 
             await _remoteServices.GpsPositionService.ReceiveTrainsPositionAsync(trainModels);

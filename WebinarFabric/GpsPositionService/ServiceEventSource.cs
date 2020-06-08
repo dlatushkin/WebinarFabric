@@ -1,16 +1,12 @@
+using ServiceCommon;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Fabric;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace TrainsService
+namespace GpsPositionService
 {
-    [EventSource(Name = "MyCompany-WebinarFabric-TrainsService")]
-    internal sealed class ServiceEventSource : EventSource
+    [EventSource(Name = "MyCompany-WebinarFabric-GpsPositionService")]
+    internal sealed class ServiceEventSource : EventSource, IServiceEventSource
     {
         public static readonly ServiceEventSource Current = new ServiceEventSource();
 

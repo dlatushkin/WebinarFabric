@@ -4,7 +4,7 @@ using Microsoft.ServiceFabric.Services.Remoting;
 
 namespace ServiceInterfaces
 {
-    public interface IWagonGpsService : IService
+    public interface IGpsPositionService : IService
     {
     }
 }

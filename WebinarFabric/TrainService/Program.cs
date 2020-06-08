@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace WagonGpsService
+namespace TrainService
 {
     internal static class Program
     {
@@ -21,10 +21,10 @@ namespace WagonGpsService
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
 
-                ServiceRuntime.RegisterServiceAsync("WagonGpsServiceType",
-                    context => new WagonGpsService(context)).GetAwaiter().GetResult();
+                ServiceRuntime.RegisterServiceAsync("TrainServiceType",
+                    context => new TrainService(context)).GetAwaiter().GetResult();
 
-                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(WagonGpsService).Name);
+                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(TrainService).Name);
 
                 // Prevents this host process from terminating so services keep running.
                 Thread.Sleep(Timeout.Infinite);

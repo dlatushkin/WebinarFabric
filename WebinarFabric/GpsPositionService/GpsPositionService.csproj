@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="4.1.416" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceCommon\ServiceCommon.csproj" />
+    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace WagonGpsService
+namespace TrainService
 {
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class WagonGpsService : StatelessService
+    internal sealed class TrainService : StatelessService
     {
-        public WagonGpsService(StatelessServiceContext context)
+        public TrainService(StatelessServiceContext context)
             : base(context)
         { }
 

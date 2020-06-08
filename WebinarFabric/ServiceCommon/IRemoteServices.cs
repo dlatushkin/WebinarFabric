@@ -10,6 +10,6 @@ namespace ServiceCommon
 
         IBoardingService BoardingService { get; }
 
-        IWagonGpsService WagonGpsService { get; }
+        IGpsPositionService WagonGpsService { get; }
     }
 }

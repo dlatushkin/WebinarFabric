@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="WebinarFabricType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="GpsPositionService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="GpsPositionService_PartitionCount" DefaultValue="1" />
+    <Parameter Name="GpsPositionService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="TrainService_InstanceCount" DefaultValue="-1" />
     <Parameter Name="BoardingService_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="WagonGpsService_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="TrainsService_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="TrainsService_PartitionCount" DefaultValue="1" />
-    <Parameter Name="TrainsService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TopologyService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TopologyService_PartitionCount" DefaultValue="1" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" DefaultValue="3" />
@@ -17,18 +17,18 @@
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="BoardingServicePkg" ServiceManifestVersion="1.0.0" />
+    <ServiceManifestRef ServiceManifestName="GpsPositionServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
     <!--<EnvironmentOverrides CodePackageRef="code">
       <EnvironmentVariable Name="TopologyService.Url" Value="[TopologyService.Url]" />
     </EnvironmentOverrides>-->
   </ServiceManifestImport>
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="WagonGpsServicePkg" ServiceManifestVersion="1.0.0" />
+    <ServiceManifestRef ServiceManifestName="TrainServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="TrainsServicePkg" ServiceManifestVersion="1.0.0" />
+    <ServiceManifestRef ServiceManifestName="BoardingServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
@@ -51,20 +51,20 @@
          ServiceFabric PowerShell module.
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="GpsPositionService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="GpsPositionServiceType" TargetReplicaSetSize="[GpsPositionService_TargetReplicaSetSize]" MinReplicaSetSize="[GpsPositionService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[GpsPositionService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="TrainService" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="TrainServiceType" InstanceCount="[TrainService_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
     <Service Name="BoardingService" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="BoardingServiceType" InstanceCount="[BoardingService_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
-    </Service>
-    <Service Name="WagonGpsService" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="WagonGpsServiceType" InstanceCount="[WagonGpsService_InstanceCount]">
-        <SingletonPartition />
-      </StatelessService>
-    </Service>
-    <Service Name="TrainsService" ServicePackageActivationMode="ExclusiveProcess">
-      <StatefulService ServiceTypeName="TrainsServiceType" TargetReplicaSetSize="[TrainsService_TargetReplicaSetSize]" MinReplicaSetSize="[TrainsService_MinReplicaSetSize]">
-        <UniformInt64Partition PartitionCount="[TrainsService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
-      </StatefulService>
     </Service>
     <Service Name="TopologyService" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="TopologyServiceType" TargetReplicaSetSize="[TopologyService_TargetReplicaSetSize]" MinReplicaSetSize="[TopologyService_MinReplicaSetSize]">

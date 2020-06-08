@@ -33,9 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BoardingService\BoardingService.csproj" />
+    <ProjectReference Include="..\GpsPositionService\GpsPositionService.csproj" />
     <ProjectReference Include="..\TopologyService\TopologyService.csproj" />
-    <ProjectReference Include="..\TrainsService\TrainsService.csproj" />
-    <ProjectReference Include="..\WagonGpsService\WagonGpsService.csproj" />
+    <ProjectReference Include="..\TrainService\TrainService.csproj" />
     <ProjectReference Include="..\WebApiWebinarService\WebApiWebinarService.csproj">
       <ServiceLaunchUrl>http://{MachineName}:{ServicePort}/weatherforecast</ServiceLaunchUrl>
     </ProjectReference>

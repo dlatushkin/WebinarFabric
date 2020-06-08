@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace WagonGpsService
+namespace TrainService
 {
-    [EventSource(Name = "MyCompany-WebinarFabric-WagonGpsService")]
+    [EventSource(Name = "MyCompany-WebinarFabric-TrainService")]
 internal sealed class ServiceEventSource : EventSource
 {
     public static readonly ServiceEventSource Current = new ServiceEventSource();

@@ -32,6 +32,6 @@ namespace ServiceCommon
 
         public IBoardingService BoardingService => throw new NotImplementedException();
 
-        public IWagonGpsService WagonGpsService => throw new NotImplementedException();
+        public IGpsPositionService WagonGpsService => throw new NotImplementedException();
     }
 }

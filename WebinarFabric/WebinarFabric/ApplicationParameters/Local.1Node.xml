@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/WebinarFabric" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="GpsPositionService_PartitionCount" Value="1" />
+    <Parameter Name="GpsPositionService_MinReplicaSetSize" Value="1" />
+    <Parameter Name="GpsPositionService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="TrainService_InstanceCount" Value="1" />
     <Parameter Name="BoardingService_InstanceCount" Value="1" />
-    <Parameter Name="WagonGpsService_InstanceCount" Value="1" />
-    <Parameter Name="TrainsService_PartitionCount" Value="1" />
-    <Parameter Name="TrainsService_MinReplicaSetSize" Value="1" />
-    <Parameter Name="TrainsService_TargetReplicaSetSize" Value="1" />
     <Parameter Name="TopologyService_PartitionCount" Value="1" />
     <Parameter Name="TopologyService_MinReplicaSetSize" Value="1" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" Value="1" />

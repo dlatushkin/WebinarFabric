@@ -38,7 +38,7 @@ namespace ServiceCommon
                 new Lazy<ITrainService>(
                     () => ServiceProxy.Create<ITrainService>(
                         new Uri(trainServiceUrl),
-                        new ServicePartitionKey(0),
+                        new ServicePartitionKey(),
                         listenerName: ListenerName));
         }
 

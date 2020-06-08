@@ -8,6 +8,8 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceCommon;
 using ServiceInterfaces;
 using HelpersCommon;
+using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 
 namespace TrainService
 {
@@ -47,10 +49,24 @@ namespace TrainService
                         Station = station,
                         Trains = trains.Select(t => new Train { Number = t.Number }).ToArray()
                     };
+
+                    result.Add(stationTrains);
                 }
             }
 
             return result.ToArray();
+        }
+
+        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
+        {
+            //var listeners = new ServiceInstanceListener[]
+            //{
+            //    new ServiceInstanceListener()
+            //};
+
+            //return listeners;
+
+            return this.CreateServiceRemotingInstanceListeners();
         }
     }
 }

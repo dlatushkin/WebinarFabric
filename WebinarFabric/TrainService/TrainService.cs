@@ -59,13 +59,6 @@ namespace TrainService
 
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            //var listeners = new ServiceInstanceListener[]
-            //{
-            //    new ServiceInstanceListener()
-            //};
-
-            //return listeners;
-
             return this.CreateServiceRemotingInstanceListeners();
         }
     }

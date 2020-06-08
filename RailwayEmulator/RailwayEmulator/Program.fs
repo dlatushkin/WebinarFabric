@@ -8,7 +8,7 @@ open Suave.Successful
 open Suave.ServerErrors
 open Suave.Writers
 open Newtonsoft.Json
-
+open Flurl.Http
 open AgentUtilities
 
 let railway = Railways.buildRailway()
@@ -58,6 +58,25 @@ let getTopology() =
   |> OK
   >=> setMimeType "application/json"
 
+let getFlatTrains() = 
+  let railway = railwayAgent.PostAndReply(Railways.Get)
+  railway.Lines
+  |> fun lines -> seq { for l in lines do
+                          for t in l.Trains do
+                            yield t }
+
+let getTrainPositions() =
+  getFlatTrains()
+  |> Seq.map(fun t -> {| Number = t.Number; Point = t.Point |})
+
+let getTrainPositionsWebResponse() = 
+  getTrainPositions()
+  |> JsonConvert.SerializeObject
+  |> OK
+  >=> setMimeType "application/json"
+
+
+
 let getAnswer id =
   getAnswerFromDb id
   |> JsonConvert.SerializeObject
@@ -97,6 +116,20 @@ let setCORSHeaders =
   >=> addHeader "Access-Control-Allow-Headers" "content-type" 
   >=> addHeader "Access-Control-Allow-Methods" "GET,POST,PUT" 
 
+let basicHandler _ =
+  let now = DateTime.Now
+  let response = railwayAgent.Post(Railways.Tick(now))
+  let trainPositions = getTrainPositions()
+  "http://dxwpc:8971/api/train-positions".PostJsonAsync(trainPositions) |> Async.AwaitIAsyncResult |> ignore
+  response
+
+let tick() =
+  let now = DateTime.Now
+  railwayAgent.Post(Railways.Tick(now))
+  let trainPositions = getTrainPositions()
+  "http://dxwpc:8971/api/train-positions".PostJsonAsync(trainPositions) |> Async.AwaitIAsyncResult |> ignore
+  NO_CONTENT
+
 let app = 
   choose
     [ GET >=> 
@@ -107,10 +140,19 @@ let app =
               [ path "/" >=> OK "Hello World"
                 path "/lines" >=> request (fun r -> getLines())
                 path "/topology" >=> request(fun r -> getTopology())
+                path "/trains" >=> request(fun r -> getTrainPositionsWebResponse())
                 pathScan "/answer/%d" (fun id -> getAnswer id) ]
           )
-      POST >=> choose
-        [ path "/answer" >=> createAnswer ]
+
+      POST >=> 
+        fun context -> 
+          context |> (
+            setCORSHeaders
+            >=> choose
+              [ path "/answer" >=> createAnswer
+                path "/tick" >=> request(fun r -> tick()) ]
+          )
+
       PUT >=> choose
         [ path "/answer" >=> updateAnswer ]
       DELETE >=> choose
@@ -120,12 +162,8 @@ let app =
 [<EntryPoint>]
 let main argv =
 
-  let basicHandler _ =
-    let now = DateTime.Now
-    railwayAgent.Post(Railways.Tick(now))
-
   let basicTimer = TimerUtilities.createTimer 1000 basicHandler
-  Async.Start basicTimer
+  //Async.Start basicTimer
 
   startWebServer defaultConfig app
 

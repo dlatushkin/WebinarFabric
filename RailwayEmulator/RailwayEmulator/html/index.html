@@ -28,8 +28,15 @@
 
             function tick() {
                 if (play) {
+                    postTick();
                     getData();
                 }
+            }
+
+            function postTick() {
+                $.post("http://localhost:8080/tick", function(data) {
+                    console.log("ticked");
+                });
             }
 
             function getData() {
@@ -222,7 +229,7 @@
                     <i class="fa fa-play"></i>
                 </button>
             </h1>
-            
+
             <div id="dvLines">
 
                 <div class="container p-3 my-3 border" style="display: none;">

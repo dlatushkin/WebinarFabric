@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ServiceCommon\ServiceCommon.csproj" />
+    <ProjectReference Include="..\WebModels\WebModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -32,11 +32,17 @@ namespace TopologyService.Logics
 
         public async Task RefreshAsync()
         {
-            var responseRecords = await _topologyConfig.Url
-                    .AppendPathSegment("topology")
-                    .GetJsonAsync<TopologyRecord[]>();
+            try
+            {
+                var responseRecords = await _topologyConfig.Url
+                            .AppendPathSegment("topology")
+                            .GetJsonAsync<TopologyRecord[]>();
 
-            _topology = responseRecords.ToDictionary(r => r.Line, r => r.Stations);
+                _topology = responseRecords.ToDictionary(r => r.Line, r => r.Stations);
+            }
+            catch (FlurlHttpException fex)
+            {
+            }
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using Microsoft.ServiceFabric.Services.Client;
+﻿using System;
+using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 using ServiceInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ServiceCommon
 {
@@ -12,6 +10,8 @@ namespace ServiceCommon
         private const string ListenerName = "V2_1Listener";
 
         private readonly Lazy<ITopologyService> _topologyService;
+        private readonly Lazy<IGpsPositionService> _gpsPositionService;
+        private readonly Lazy<ITrainService> _trainService;
 
         public RemoteServices()
         {
@@ -24,14 +24,28 @@ namespace ServiceCommon
                         new Uri(topologyServiceUrl),
                         new ServicePartitionKey(0),
                         listenerName: ListenerName));
+
+            var gpsPositionServiceUrl = applicationNamePrefix + "GpsPositionService";
+            _gpsPositionService =
+                new Lazy<IGpsPositionService>(
+                    () => ServiceProxy.Create<IGpsPositionService>(
+                        new Uri(gpsPositionServiceUrl),
+                        new ServicePartitionKey(0),
+                        listenerName: ListenerName));
+
+            var trainServiceUrl = applicationNamePrefix + "TrainService";
+            _trainService =
+                new Lazy<ITrainService>(
+                    () => ServiceProxy.Create<ITrainService>(
+                        new Uri(trainServiceUrl),
+                        new ServicePartitionKey(0),
+                        listenerName: ListenerName));
         }
 
         public ITopologyService TopologyService => _topologyService.Value;
 
-        public ITrainService TrainService => throw new NotImplementedException();
+        public ITrainService TrainService => _trainService.Value;
 
-        public IBoardingService BoardingService => throw new NotImplementedException();
-
-        public IGpsPositionService WagonGpsService => throw new NotImplementedException();
+        public IGpsPositionService GpsPositionService => _gpsPositionService.Value;
     }
 }

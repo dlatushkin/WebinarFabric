@@ -15,9 +15,6 @@ using TopologyService.Logics;
 
 namespace TopologyService
 {
-    /// <summary>
-    /// An instance of this class is created for each service replica by the Service Fabric runtime.
-    /// </summary>
     public class TopologyService : BaseStatefulService, ITopologyService
     {
         private readonly ITopologyLogic _topologyLogic;

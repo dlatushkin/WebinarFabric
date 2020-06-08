@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using ClusterModels.Trains;
 using Microsoft.AspNetCore.Mvc;
 using ServiceCommon;
 using WebModels;
@@ -16,11 +18,27 @@ namespace WebApiWebinarService.Controllers
             _remoteServices = remoteServices;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var trainModels = await _remoteServices.GpsPositionService.GetTrainsPositionAsync();
+
+            var trainEntries = trainModels
+                .Select(t => new TrainPositionEntry { Number = t.Number, Point = t.Point })
+                .ToArray();
+
+            return Ok(trainEntries);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(TrainPositionEntry[] trainPositions)
         {
-            var lines = await _remoteServices.TopologyService.GetLinesAsync();
-            return Ok(lines);
+            var trainModels = trainPositions
+                .Select(t => new TrainPosition { Number = t.Number, Point = t.Point })
+                .ToArray();
+
+            await _remoteServices.GpsPositionService.ReceiveTrainsPositionAsync(trainModels);
+            return Accepted();
         }
     }
 }

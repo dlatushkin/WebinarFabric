@@ -8,8 +8,6 @@ namespace ServiceCommon
 
         ITrainService TrainService { get; }
 
-        IBoardingService BoardingService { get; }
-
-        IGpsPositionService WagonGpsService { get; }
+        IGpsPositionService GpsPositionService { get; }
     }
 }

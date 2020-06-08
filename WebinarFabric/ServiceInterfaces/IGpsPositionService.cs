@@ -6,5 +6,8 @@ namespace ServiceInterfaces
 {
     public interface IGpsPositionService : IService
     {
+        Task<TrainPosition[]> GetTrainsPositionAsync();
+
+        Task ReceiveTrainsPositionAsync(TrainPosition[] trainPositions);
     }
 }

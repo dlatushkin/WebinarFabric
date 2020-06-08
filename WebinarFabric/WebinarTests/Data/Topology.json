@@ -1,0 +1,29 @@
+[
+    {
+        "Line": {
+            "Id": "L01",
+            "Length": 100.0,
+            "Name": "1st Line"
+        },
+        "Stations": [
+            {
+                "Code": "OSL",
+                "Name": "Oslo",
+                "FromPoint": 10.5,
+                "ToPoint": 12.5
+            },
+            {
+                "Code": "PAR",
+                "Name": "Paradise",
+                "FromPoint": 20.5,
+                "ToPoint": 22.5
+            },
+            {
+                "Code": "STV",
+                "Name": "Stavanger",
+                "FromPoint": 90.5,
+                "ToPoint": 92.5
+            }
+        ]
+    }
+]

@@ -53,7 +53,7 @@ let getLines() =
 let getTopology() =
   let railway = railwayAgent.PostAndReply(Railways.Get)
   railway.Lines
-  |> Array.map(fun l -> {| Id = l.Id; Name = l.Name; Length = l.Length |})
+  |> Array.map(fun l -> {| Line = {| Id = l.Id; Name = l.Name; Length = l.Length |}; Stations = l.Stations |})
   |> JsonConvert.SerializeObject
   |> OK
   >=> setMimeType "application/json"

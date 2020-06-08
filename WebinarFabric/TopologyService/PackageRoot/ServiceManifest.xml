@@ -17,6 +17,9 @@
         <Program>TopologyService.exe</Program>
       </ExeHost>
     </EntryPoint>
+    <EnvironmentVariables>
+        <EnvironmentVariable Name="TopologyService.Url" Value="http://localhost:8080" />
+    </EnvironmentVariables>
   </CodePackage>
 
   <!-- Config package is the contents of the Config directoy under PackageRoot that contains an 

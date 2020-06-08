@@ -9,6 +9,7 @@
     <Parameter Name="TopologyService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TopologyService_PartitionCount" DefaultValue="1" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="TopologyService.Url" DefaultValue="http://localhost:8080" />
     <Parameter Name="WebApiWebinarService_ASPNETCORE_ENVIRONMENT" DefaultValue="" />
     <Parameter Name="WebApiWebinarService_InstanceCount" DefaultValue="-1" />
   </Parameters>
@@ -18,6 +19,9 @@
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="BoardingServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
+    <!--<EnvironmentOverrides CodePackageRef="code">
+      <EnvironmentVariable Name="TopologyService.Url" Value="[TopologyService.Url]" />
+    </EnvironmentOverrides>-->
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WagonGpsServicePkg" ServiceManifestVersion="1.0.0" />
@@ -30,6 +34,9 @@
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="TopologyServicePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
+    <EnvironmentOverrides CodePackageRef="code">
+      <EnvironmentVariable Name="TopologyService.Url" Value="[TopologyService.Url]" />
+    </EnvironmentOverrides>
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WebApiWebinarServicePkg" ServiceManifestVersion="1.0.0" />

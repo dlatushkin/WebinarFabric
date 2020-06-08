@@ -9,6 +9,7 @@
     <Parameter Name="TopologyService_PartitionCount" Value="1" />
     <Parameter Name="TopologyService_MinReplicaSetSize" Value="1" />
     <Parameter Name="TopologyService_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="TopologyService.Url" Value="http://localhost:8080" />
     <Parameter Name="WebApiWebinarService_ASPNETCORE_ENVIRONMENT" Value="Development" />
     <Parameter Name="WebApiWebinarService_InstanceCount" Value="1" />
   </Parameters>

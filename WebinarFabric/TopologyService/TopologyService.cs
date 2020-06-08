@@ -11,6 +11,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceCommon;
 using ServiceInterfaces;
 using HelpersCommon;
+using TopologyService.Logics;
 
 namespace TopologyService
 {
@@ -19,34 +20,45 @@ namespace TopologyService
     /// </summary>
     public class TopologyService : BaseStatefulService, ITopologyService
     {
-        private readonly Dictionary<Line, Station[]> _lineStations = new Dictionary<Line, Station[]>();
+        private readonly ITopologyLogic _topologyLogic;
 
-        public TopologyService(StatefulServiceContext context)
+        public TopologyService(
+            ITopologyLogic topologyLogic,
+            StatefulServiceContext context)
             : base(context)
-        { }
-
-        protected override Task RunSpecificAsync(CancellationToken cancellationToken)
         {
-            return base.RunSpecificAsync(cancellationToken);
+            _topologyLogic = topologyLogic;
+        }
+
+        protected override async Task RunSpecificAsync(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await _topologyLogic.RefreshAsync();
+
+                await Task.Delay(10000);
+            }
         }
 
         public Task<Line[]> GetLinesAsync()
         {
-            var lines = _lineStations.Keys.ToArray();
+            var lines = _topologyLogic.Topology.Keys.ToArray();
             return Task.FromResult(lines);
         }
 
         public Task<Station[]> GetStationsAsync(string lineId)
         {
-            var lineStations = _lineStations;
+            var topology = _topologyLogic.Topology;
 
-            var line = lineStations.Keys.FirstOrDefault(k => lineId.EqualsOrdinalIgnoreCase(k.Id));
+            var line = topology.Keys.FirstOrDefault(k => lineId.EqualsOrdinalIgnoreCase(k.Id));
             if (line == default)
             {
                 return Task.FromException<Station[]>(new InvalidOperationException($"Couldn't find line by id='{lineId}'"));
             }
 
-            var lines = lineStations[line];
+            var lines = topology[line];
             return Task.FromResult(lines);
         }
     }

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.ServiceFabric" Version="3.0.0" />
+    <PackageReference Include="Flurl.Http" Version="2.4.2" />
     <PackageReference Include="Microsoft.ServiceFabric.Diagnostics.Internal" Version="4.1.416" />
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="4.1.416" />
     <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="4.1.416" />

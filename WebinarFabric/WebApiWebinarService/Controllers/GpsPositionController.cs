@@ -21,7 +21,7 @@ namespace WebApiWebinarService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var trainModels = await _remoteServices.GpsPositionService.GetTrainsPositionAsync();
+            var trainModels = await _remoteServices.GpsPositionService.GetTrainsPositionAsync("L01");
 
             var trainEntries = trainModels
                 .Select(t => new TrainPositionEntry { LineId = t.LineId, Number = t.Number, Point = t.Point })

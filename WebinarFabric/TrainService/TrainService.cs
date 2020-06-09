@@ -29,11 +29,11 @@ namespace TrainService
         {
             var result = new List<StationTrains>();
 
-            var trainPositionMoments = await _remoteServices.GpsPositionService.GetTrainsPositionAsync();
-
             var lines = await _remoteServices.TopologyService.GetLinesAsync();
             foreach (var line in lines)
             {
+                var trainPositionMoments = await _remoteServices.GpsPositionService.GetTrainsPositionAsync(line.Id);
+
                 var lineTrainPositionMoments = trainPositionMoments.Where(tpm => line.Id.EqualsOrdinalIgnoreCase(tpm.LineId));
 
                 var stations = await _remoteServices.TopologyService.GetStationsAsync(line.Id);

@@ -64,11 +64,14 @@
         </script>
         <style>
             .emu-stationtrains-container {
-                width: 100%;
-                height: 200px;
+                /* height: 200px; */
+                display: flex;
+                justify-content: center;
             }
 
             .emu-stationtrains {
+                margin: 10px;
+                padding: 3px;
                 border: 1px solid black;
                 width: 150px;
                 height: 150px;
@@ -92,6 +95,10 @@
 
                 <span id="spStationTrainsTemplate" class="emu-stationtrains" style="display: none;">
                     <h2 class="emu-stationtrains-stationname">Oslo</h2>
+                </span>
+
+                <span id="spStationTrainsTemplate1" class="emu-stationtrains" style="display: none;">
+                    <h2 class="emu-stationtrains-stationname">Stavanger</h2>
                 </span>
 
             </div>

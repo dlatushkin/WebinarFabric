@@ -54,7 +54,7 @@
                                                         '<div class="emu-train-container-top">' +
                                                         '</div>' +
                                                     '</div>' +
-                                                    '<div class="emu-station-container"></div>' +
+                                                    '<div class="container emu-station-container"></div>' +
                                                     '<div class="container p-3 my-3 border">' +
                                                         '<div class="emu-train-container-bottom">' +
                                                         '</div>' +
@@ -124,6 +124,13 @@
                                 $('#' + trainElId).addClass(colorClass);
 
                                 $('#' + trainElId).css('left', train.Point + '%');
+                                // if (train.Direction > 0.0) {
+                                //     console.log(train.Number + ' left');
+                                //     $('#' + trainElId).css('left', train.Point + '%');
+                                // } else {
+                                //     console.log(train.Number + ' right');
+                                //     $('#' + trainElId).css('right', train.Point + '%');
+                                // }
                                 $('#' + trainElId).css('display', 'block');
                             }
 
@@ -135,10 +142,25 @@
 
                                 $('#' + lineElId + ' #' + stationElId).remove();
 
-                                var stationHtml = '<span class="emu-station">' + station.Code + '</span>';
+                                var stationHtml = '<span class="emu-station-name">' + station.Code + '</span>';
 
                                 $(stationHtml).attr('id', stationElId).appendTo('#' + lineElId + ' .emu-station-container');
                                 $('#' + stationElId).css('left', station.FromPoint + '%');
+                                $('#' + stationElId).css('width', (station.ToPoint - station.FromPoint) + '%');
+
+                                var stationTopElId = "sp" + station.Code + "Top";
+                                $('#' + lineElId + ' #' + stationTopElId).remove();
+                                var stationTopHtml = '<span class="emu-station"></span>';
+                                $(stationTopHtml).attr('id', stationTopElId).appendTo('#' + lineElId + ' .emu-train-container-top');
+                                $('#' + stationTopElId).css('left', station.FromPoint + '%');
+                                $('#' + stationTopElId).css('width', (station.ToPoint - station.FromPoint) + '%');
+
+                                var stationBottomElId = "sp" + station.Code + "Bottom";
+                                $('#' + lineElId + ' #' + stationBottomElId).remove();
+                                var stationBottomHtml = '<span class="emu-station"></span>';
+                                $(stationBottomHtml).attr('id', stationBottomElId).appendTo('#' + lineElId + ' .emu-train-container-bottom');
+                                $('#' + stationBottomElId).css('left', station.FromPoint + '%');
+                                $('#' + stationBottomElId).css('width', (station.ToPoint - station.FromPoint) + '%');
                             }
                         }
                     });
@@ -160,14 +182,16 @@
 
             .emu-train-forth {
                 position: absolute;
-                border: 1px solid black;
+                border-left: 1px solid black;
+                top: 15px;
                 width: 150px;
                 height: 80px;
             }
 
             .emu-train-back {
                 position: absolute;
-                border: 1px solid black;
+                border-left: 1px solid black;
+                top: 15px;
                 width: 150px;
                 height: 80px;
             }
@@ -196,9 +220,18 @@
 
             .emu-station {
                 position: absolute;
-                width: 100px;
+                border: 1px solid #aaaaaa;
+                background-color: #aaaaaa88;
+                width: 50px;
                 height: 25px;
-                left: 50%;
+            }
+
+            .emu-station-name {
+                position: absolute;
+                font-weight: bold;
+                font-size: larger;
+                width: 50px;
+                height: 25px;
             }
 
             .emu-train-777 {
@@ -225,7 +258,7 @@
         <div class="container-fluid">
             <h1>Railway Emulator
                 <!-- <button id="btnLoad">Load</button> -->
-                <button id="btnPlayStop">
+                <button id="btnPlayStop" style="margin-top: 5px;">
                     <i class="fa fa-play"></i>
                 </button>
             </h1>
@@ -280,7 +313,7 @@
                             </span>
                         </div>
 
-                        <div class="emu-station-container">
+                        <div class="container emu-station-container">
                             <span class="emu-station" style="left: 12%;">OSL</span>
                             <span class="emu-station" style="left: 22%;">PAR</span>
                             <span class="emu-station" style="left: 92%;">STV</span>
